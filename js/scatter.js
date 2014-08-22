@@ -11,13 +11,6 @@ $('#buttons').on('change', function() {
 	settings.yVar = 'hom_' + year
 	draw()
 })
-	// $('#yvar').selectmenu({
-		// change:function() {
-		
-		// settings.yVar=$('#yvar').val()
-			// draw()
-		// }, 
-// })
 
 //Width and height settings
 var settings = {
@@ -111,9 +104,85 @@ var build = function() {
 	// Draw axis labels
 	drawAxisLabels();
 	
+	//Create text that can move
+	
+	zeroText = d3.select('#scatter-svg').append("text")
+	  .attr('transform', 'translate(' + (xScale(0)) + ',' + (1.3*settings.padding + 2.3*settings.radius)+')')
+	  .attr("class", "legendWhite")
+	  .text("Zero-Migration Axis")
+	  
+	sendingText = d3.select('#scatter-svg').append("text")
+	  .attr('transform', 'translate(' + (xScale(-13)) + ',' + (2*settings.padding + 2.3*settings.radius)+')')
+	  .attr("class", "netSending")
+	  .text("Migrant-Sending Nations")
+
+	negaText = d3.select('#scatter-svg').append("text")
+	  .attr('transform', 'translate(' + (xScale(-13)) + ',' + (2.5*settings.padding + 2.3*settings.radius)+')')
+	  .attr("class", "legendWhite")
+	  .text("Negative number means")
+
+	negbText = d3.select('#scatter-svg').append("text")
+	  .attr('transform', 'translate(' + (xScale(-13)) + ',' + (2.5*settings.padding + 2.3*settings.radius)+')')
+	  .attr("class", "legendWhite")
+	  .text("human flow out.")	  
+
+	receiveText = d3.select('#scatter-svg').append("text")
+	  .attr('transform', 'translate(' + (xScale(10)) + ',' + (2*settings.padding + 2.3*settings.radius)+')')
+	  .attr("class", "netReceiving")
+	  .text("Migrant-Receiving Nations")
+
+	posaText = d3.select('#scatter-svg').append("text")
+	  .attr('transform', 'translate(' + (xScale(10)) + ',' + (2.5*settings.padding + 2.3*settings.radius)+')')
+	  .attr("class", "legendWhite")
+	  .text("Positive number means")
+	  
+	posbText = d3.select('#scatter-svg').append("text")
+	  .attr('transform', 'translate(' + (xScale(10)) + ',' + (3*settings.padding + 2.3*settings.radius)+')')
+	  .attr("class", "legendWhite")
+	  .text("human flow in.")
+	  
 	// Draw circles and axes
 	draw();
 }
+
+	// Transition text by taking zeroText and changing the x attribute to be set as the value of the xScale at 0 plus your padding 
+		var drawMovingText = function() { 
+			zeroText 
+			.transition().duration(500) 
+			.attr('transform', 'translate(' + (xScale(0)) + ',' + (1.3*settings.padding + 2.3*settings.radius)+')') 
+				//.call(zeroText); 
+
+			sendingText 
+			.transition().duration(500) 
+			.attr('transform', 'translate(' + (xScale(-13)) + ',' + (2*settings.padding + 2.3*settings.radius)+')') 
+				//.call(sendingText); 
+
+			negaText 
+			.transition().duration(500) 
+			.attr('transform', 'translate(' + (xScale(-13)) + ',' + (2.5*settings.padding + 2.3*settings.radius)+')') 
+				//.call(negText);
+
+			negbText 
+			.transition().duration(500) 
+			.attr('transform', 'translate(' + (xScale(-13)) + ',' + (3*settings.padding + 2.3*settings.radius)+')') 
+				//.call(negText);
+
+			receiveText 
+			.transition().duration(500) 
+			.attr('transform', 'translate(' + (xScale(10)) + ',' + (2*settings.padding + 2.3*settings.radius)+')') 
+				//.call(receiveText); 
+
+			posaText 
+			.transition().duration(500) 
+			.attr('transform', 'translate(' + (xScale(10)) + ',' + (2.5*settings.padding + 2.3*settings.radius)+')') 
+				//.call(posText); 				
+				
+			posbText 
+			.transition().duration(500) 
+			.attr('transform', 'translate(' + (xScale(10)) + ',' + (3*settings.padding + 2.3*settings.radius)+')') 
+				//.call(posText);
+ } 
+
 
 // Circle positioning function
 var circleFunc = function(circ) {
@@ -160,8 +229,10 @@ var draw = function() {
 		.transition().duration(500)
 		.attr('transform', 'translate(' + (xScale(0) + settings.padding) + ',' + (settings.padding + 2.3*settings.radius)+')')
 		.call(middleAxisFunction);
-	
+		
+	drawMovingText()
 }	
+
 // Draw axis labels
 var drawAxisLabels = function() {
 	// xAxisLabel
@@ -256,50 +327,6 @@ build()
 	  .attr("class", "rectText")
 	  .text("Hover on circle to see country name and data.")
 	 
-	 	 //Create text that can move
-	  // Append text    
-	sendingText = d3.select('#scatter-svg').append("text")
-      .attr("x", xScale(-16))
-      .attr("y", yScale(60))
-	  .attr("width", 300)
-	  .attr("height", 100)
-	  .attr("class", "netSending")
-	  .text("Migrant-Sending Nations")
-
-	negText = d3.select('#scatter-svg').append("text")
-      .attr("x", xScale(-19))
-      .attr("y", yScale(50))
-	  .attr("width", 300)
-	  .attr("height", 100)
-	  .attr("class", "legendWhite")
-	  .text("Negative number means human flow out.")
-	  
-
-	receiveText = d3.select('#scatter-svg').append("text")
-      .attr("y", yScale(60))
-	  .attr("x", xScale(14))
-      .attr("width", 300)
-	  .attr("height", 100)
-	  .attr("class", "netReceiving")
-	  .text("Migrant-Receiving Nations")
-
-	posText = d3.select('#scatter-svg').append("text")
-      .attr("x", xScale(12))
-      .attr("y", yScale(50))
-	  .attr("width", 300)
-	  .attr("height", 100)
-	  .attr("class", "legendWhite")
-	  .text("Positive number means human flow in.")
-	  
-	  zeroText = d3.select('#scatter-svg').append("text")
-      .attr("x", xScale(0))
-      .attr("y", yScale(74))
-	  .attr("width", 300)
-	  .attr("height", 100)
-	  .attr("class", "legendWhite")
-	  .text("Zero-Migration Axis")
-
- 
 //Format numbers
 
 var formatter = d3.format('.3s')
@@ -324,36 +351,8 @@ $('#scatter-svg circle').poshytip({
 		
 	}
 })
-	  // Transition text by taking zeroText and changing the x attribute to be set as the value of the xScale at 0 plus your padding
-	var drawMovingText = function() {
-	zeroText
-		.transition().duration(500)
-		.attr('transform', 'translate(' + (xScale(0) + -5.5*settings.padding) + ',' + (settings.padding + 2.3*settings.radius)+')')
-		.call(zeroText);
-}
 
 
-
-// Create SVG element
-	//var svg = d3.select("scatterplot-div")
-	    //.append("svg")
-	    //.attr("width", 60)
-	    //.attr("height", 60);
-		
-//Alternative way to add legend
-	 //svg.append("svg:text")
-		//attr("class", "axisText")
-	   //.attr("x", 0)
-	   //.attr("y", 30)
-	   //.text("Legend");
-	   	  
-// // Append rectangle
-	// legend.append("rect")
-      // .attr("x", 290)
-      // .attr("y", -2)
-	  // .attr("width", 310)
-	  // .attr("height", 40)
-	  // .style("fill", "white")
 	  
 	  
 	
